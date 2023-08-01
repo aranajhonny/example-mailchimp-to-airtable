@@ -1,0 +1,35 @@
+{
+  "schema": {
+    "types": [
+      {
+        "name": "Root",
+        "actions": [
+          {
+            "name": "configure",
+            "type": "Void",
+            "params": [
+                {
+                  "name": "audienceId",
+                  "description": "Mailchimp audience id",
+                  "type": "String"
+                },
+                {
+                  "name": "tableId",
+                  "description": "Airtable table id",
+                  "type": "String"
+                }
+            ]
+          },
+          {
+            "name": "handleEvent",
+            "type": "Void"
+          }
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "audiences": "mailchimp:audiences",
+    "tables": "airtable:tables"
+  }
+}
