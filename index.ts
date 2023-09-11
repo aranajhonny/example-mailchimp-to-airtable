@@ -3,7 +3,7 @@
 // `state` is an object that persists across program updates. Store data here.
 import { nodes, root, state } from "membrane";
 
-export async function configure({ args: { audienceId, tableId }}) {
+export async function configure({ audienceId, tableId }) {
   const audience = await nodes.audiences.one({ id: audienceId });
   await audience.subscriptions.$subscribe(root.handleEvent);
 
@@ -11,7 +11,7 @@ export async function configure({ args: { audienceId, tableId }}) {
   state.table = nodes.tables.one({ id: tableId });
 }
 
-export async function handleEvent({ event }) {
+export async function handleEvent(_, { event }) {
   const data = await event.member.$query(
     `{ email_address, status, timestamp_opt }`
   );

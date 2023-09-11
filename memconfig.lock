@@ -1,59 +1,23 @@
 {
   "types": {
-    "table": {
-      "gref_hash": "49b2f3f2d31ec6e675cab9dd9677411d95edaaad3309c3de7a2b74b955dce370",
-      "type": "airtable:Table"
+    "tables": {
+      "gref_hash": "113da6ff6c9eda09fd78853229ce24f1e361d0b575629a0518cb240dc93c4965",
+      "type": "airtable:TableCollection"
     },
-    "audience": {
-      "gref_hash": "820509ca578d3bfd57eda146d889a89c9347da62e9d202f9b2691c02807e5a30",
-      "type": "mailchimp:Audience"
+    "audiences": {
+      "gref_hash": "aa4bcc23a3227fabafeb23c1cb5628516437bcc938e18c116619c97ff0ff747a",
+      "type": "mailchimp:AudienceCollection"
     }
   },
   "imports": [
     {
-      "name": "airtable",
+      "name": "mailchimp",
       "schema": {
         "types": [
           {
             "name": "Root",
-            "description": "Driver to manage Airtable data",
+            "description": "",
             "actions": [
-              {
-                "name": "configure",
-                "description": "",
-                "type": "Void",
-                "params": [
-                  {
-                    "name": "API_KEY",
-                    "description": "",
-                    "type": "String",
-                    "optional": false
-                  },
-                  {
-                    "name": "BASE_ID",
-                    "description": "",
-                    "type": "String",
-                    "optional": false
-                  }
-                ],
-                "hints": {}
-              },
-              {
-                "name": "refreshWebhook",
-                "description": "",
-                "type": "Void",
-                "params": [
-                  {
-                    "name": "id",
-                    "description": "",
-                    "type": "String",
-                    "optional": false
-                  }
-                ],
-                "hints": {
-                  "hidden": true
-                }
-              },
               {
                 "name": "endpoint",
                 "description": "",
@@ -90,16 +54,28 @@
                     "optional": false
                   }
                 ],
-                "hints": {
-                  "hidden": true
-                }
+                "hints": {}
+              },
+              {
+                "name": "configure",
+                "description": "",
+                "type": "Void",
+                "params": [
+                  {
+                    "name": "API_KEY",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  }
+                ],
+                "hints": {}
               }
             ],
             "fields": [
               {
-                "name": "tables",
+                "name": "audiences",
                 "description": "",
-                "type": "TableCollection",
+                "type": "AudienceCollection",
                 "params": [],
                 "hints": {}
               },
@@ -111,12 +87,19 @@
                 "hints": {}
               },
               {
+                "name": "tests",
+                "description": "",
+                "type": "Tests",
+                "params": [],
+                "hints": {}
+              },
+              {
                 "name": "parse",
                 "description": "",
                 "type": "List",
                 "ofType": {
                   "type": "Ref",
-                  "ofType": "Table"
+                  "ofType": "Audience"
                 },
                 "params": [
                   {
@@ -133,7 +116,7 @@
                   }
                 ],
                 "hints": {
-                  "hidden": false
+                  "hidden": true
                 }
               },
               {
@@ -145,17 +128,25 @@
                 "hints": {}
               }
             ],
-            "events": []
+            "events": [
+              {
+                "name": "statusChanged",
+                "description": "",
+                "type": "Void",
+                "params": [],
+                "hints": {}
+              }
+            ]
           },
           {
-            "name": "TableCollection",
+            "name": "AudienceCollection",
             "description": "",
             "actions": [],
             "fields": [
               {
                 "name": "one",
                 "description": "",
-                "type": "Table",
+                "type": "Audience",
                 "params": [
                   {
                     "name": "id",
@@ -169,15 +160,40 @@
               {
                 "name": "page",
                 "description": "",
-                "type": "TablePage",
-                "params": [],
+                "type": "AudiencePage",
+                "params": [
+                  {
+                    "name": "fields",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "count",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "email",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "offset",
+                    "description": "",
+                    "type": "Int",
+                    "optional": true
+                  }
+                ],
                 "hints": {}
               },
               {
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "TableCollection",
+                "ofType": "AudienceCollection",
                 "params": [],
                 "hints": {}
               }
@@ -185,7 +201,7 @@
             "events": []
           },
           {
-            "name": "TablePage",
+            "name": "AudiencePage",
             "description": "",
             "actions": [],
             "fields": [
@@ -193,7 +209,7 @@
                 "name": "items",
                 "description": "",
                 "type": "List",
-                "ofType": "Table",
+                "ofType": "Audience",
                 "params": [],
                 "hints": {}
               },
@@ -201,7 +217,7 @@
                 "name": "next",
                 "description": "",
                 "type": "Ref",
-                "ofType": "TablePage",
+                "ofType": "AudiencePage",
                 "params": [],
                 "hints": {}
               },
@@ -209,7 +225,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "TablePage",
+                "ofType": "AudiencePage",
                 "params": [],
                 "hints": {}
               }
@@ -217,31 +233,9 @@
             "events": []
           },
           {
-            "name": "Table",
+            "name": "Audience",
             "description": "",
-            "actions": [
-              {
-                "name": "createRecord",
-                "description": "",
-                "type": "Int",
-                "params": [
-                  {
-                    "name": "fields",
-                    "description": "",
-                    "type": "Json",
-                    "optional": false
-                  }
-                ],
-                "hints": {}
-              },
-              {
-                "name": "createWebhook",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              }
-            ],
+            "actions": [],
             "fields": [
               {
                 "name": "id",
@@ -255,21 +249,131 @@
                 "description": "",
                 "type": "String",
                 "params": [],
-                "hints": {
-                  "primary": true
-                }
+                "hints": {}
               },
               {
-                "name": "primaryFieldId",
+                "name": "web_id",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "permission_reminder",
                 "description": "",
                 "type": "String",
                 "params": [],
                 "hints": {}
               },
               {
-                "name": "records",
+                "name": "use_archive_bar",
                 "description": "",
-                "type": "RecordCollection",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "notify_on_subscribe",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "notify_on_unsubscribe",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "date_created",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "list_rating",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "email_type_option",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "subscribe_url_long",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "subscribe_url_short",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "beamer_address",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "visibility",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "double_optin",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "has_welcome",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "marketing_permissions",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "contact",
+                "description": "",
+                "type": "Contact",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "stats",
+                "description": "",
+                "type": "Stats",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "members",
+                "description": "",
+                "type": "MemberCollection",
                 "params": [],
                 "hints": {}
               },
@@ -277,33 +381,40 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "Table",
+                "ofType": "Audience",
                 "params": [],
                 "hints": {}
               }
             ],
             "events": [
               {
-                "name": "changed",
+                "name": "subscribed",
                 "description": "",
-                "type": "TableEvent",
+                "type": "MemberEvent",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "unsubscribed",
+                "description": "",
+                "type": "MemberEvent",
                 "params": [],
                 "hints": {}
               }
             ]
           },
           {
-            "name": "RecordCollection",
+            "name": "MemberCollection",
             "description": "",
             "actions": [],
             "fields": [
               {
                 "name": "one",
                 "description": "",
-                "type": "Record",
+                "type": "Member",
                 "params": [
                   {
-                    "name": "id",
+                    "name": "hash",
                     "description": "",
                     "type": "String",
                     "optional": false
@@ -314,60 +425,30 @@
               {
                 "name": "page",
                 "description": "",
-                "type": "RecordPage",
+                "type": "MemberPage",
                 "params": [
+                  {
+                    "name": "fields",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "count",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "email",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
                   {
                     "name": "offset",
                     "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "filterByFormula",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "maxRecords",
-                    "description": "",
                     "type": "Int",
-                    "optional": true
-                  },
-                  {
-                    "name": "pageSize",
-                    "description": "",
-                    "type": "Int",
-                    "optional": true
-                  },
-                  {
-                    "name": "sort",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "view",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "cellFormat",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "timeZone",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "userLocale",
-                    "description": "",
-                    "type": "String",
                     "optional": true
                   }
                 ],
@@ -377,7 +458,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "RecordCollection",
+                "ofType": "MemberCollection",
                 "params": [],
                 "hints": {}
               }
@@ -385,7 +466,7 @@
             "events": []
           },
           {
-            "name": "RecordPage",
+            "name": "MemberPage",
             "description": "",
             "actions": [],
             "fields": [
@@ -393,7 +474,7 @@
                 "name": "items",
                 "description": "",
                 "type": "List",
-                "ofType": "Record",
+                "ofType": "Member",
                 "params": [],
                 "hints": {}
               },
@@ -401,7 +482,7 @@
                 "name": "next",
                 "description": "",
                 "type": "Ref",
-                "ofType": "RecordPage",
+                "ofType": "MemberPage",
                 "params": [],
                 "hints": {}
               },
@@ -409,7 +490,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "RecordPage",
+                "ofType": "MemberPage",
                 "params": [],
                 "hints": {}
               }
@@ -417,43 +498,19 @@
             "events": []
           },
           {
-            "name": "Record",
+            "name": "Member",
             "description": "",
-            "actions": [
-              {
-                "name": "deleteRecord",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "updateRecord",
-                "description": "",
-                "type": "Int",
-                "params": [
-                  {
-                    "name": "fields",
-                    "description": "",
-                    "type": "String",
-                    "optional": false
-                  }
-                ],
-                "hints": {}
-              }
-            ],
+            "actions": [],
             "fields": [
               {
                 "name": "id",
                 "description": "",
                 "type": "String",
                 "params": [],
-                "hints": {
-                  "primary": true
-                }
+                "hints": {}
               },
               {
-                "name": "createdTime",
+                "name": "email_address",
                 "description": "",
                 "type": "String",
                 "params": [],
@@ -462,7 +519,191 @@
                 }
               },
               {
-                "name": "fields",
+                "name": "unique_email_id",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "contact_id",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "full_name",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "web_id",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "email_type",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "status",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "unsubscribe_reason",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "consents_to_one_to_one_messaging",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "merge_fields",
+                "description": "",
+                "type": "MergeFields",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "interests",
+                "description": "",
+                "type": "Interests",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "stats",
+                "description": "",
+                "type": "Stats",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "ip_signup",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "timestamp_signup",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "ip_opt",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "timestamp_opt",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "member_rating",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "last_changed",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "language",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "vip",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "email_client",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "location",
+                "description": "",
+                "type": "Location",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "marketing_permissions",
+                "description": "",
+                "type": "List",
+                "ofType": "MarketingPermissions",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "last_note",
+                "description": "",
+                "type": "LastNote",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "source",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "tags_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "tags",
+                "description": "",
+                "type": "List",
+                "ofType": "Tags",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "list_id",
                 "description": "",
                 "type": "String",
                 "params": [],
@@ -472,7 +713,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "Record",
+                "ofType": "Member",
                 "params": [],
                 "hints": {}
               }
@@ -480,20 +721,19 @@
             "events": []
           },
           {
-            "name": "TableEvent",
+            "name": "MergeFields",
             "description": "",
             "actions": [],
             "fields": [
               {
-                "name": "record",
+                "name": "property1",
                 "description": "",
-                "type": "Ref",
-                "ofType": "Record",
+                "type": "String",
                 "params": [],
                 "hints": {}
               },
               {
-                "name": "type",
+                "name": "property2",
                 "description": "",
                 "type": "String",
                 "params": [],
@@ -503,7 +743,483 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "TableEvent",
+                "ofType": "MergeFields",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Interests",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "property1",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "property2",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Interests",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Location",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "latitude",
+                "description": "",
+                "type": "Float",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "longitude",
+                "description": "",
+                "type": "Float",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gmtoff",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "dstoff",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "country_code",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "timezone",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "region",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Location",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "MarketingPermissions",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "marketing_permission_id",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "text",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "enabled",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "MarketingPermissions",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "LastNote",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "note_id",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "created_at",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "created_by",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "note",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "LastNote",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Tags",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "id",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "name",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Tags",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Contact",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "company",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "address1",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "address2",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "city",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "state",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "zip",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "country",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "phone",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Contact",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Stats",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "member_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "total_contacts",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "unsubscribe_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "cleaned_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "member_count_since_send",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "unsubscribe_count_since_send",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "cleaned_count_since_send",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "campaign_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "campaign_last_sent",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "merge_field_count",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "avg_sub_rate",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "avg_unsub_rate",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "target_sub_rate",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "open_rate",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "click_rate",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "last_sub_date",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "last_unsub_date",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Stats",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "MemberEvent",
+            "description": "",
+            "actions": [],
+            "fields": [
+              {
+                "name": "member",
+                "description": "",
+                "type": "Ref",
+                "ofType": "Member",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "email",
+                "description": "",
+                "type": "String",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "audience",
+                "description": "",
+                "type": "Ref",
+                "ofType": "Audience",
+                "params": [],
+                "hints": {}
+              },
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "MemberEvent",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "events": []
+          },
+          {
+            "name": "Tests",
+            "description": "",
+            "actions": [
+              {
+                "name": "testGetAudiences",
+                "description": "",
+                "type": "Boolean",
+                "params": [],
+                "hints": {}
+              }
+            ],
+            "fields": [
+              {
+                "name": "gref",
+                "description": "A reference to this node",
+                "type": "Ref",
+                "ofType": "Tests",
                 "params": [],
                 "hints": {}
               }
@@ -1394,32 +2110,6 @@
             }
           },
           {
-            "name": "sys-process",
-            "schema": {
-              "types": [
-                {
-                  "name": "Root",
-                  "description": "",
-                  "actions": [],
-                  "fields": [
-                    {
-                      "name": "endpointUrl",
-                      "description": "Gets the program's own endpoint URL",
-                      "type": "String",
-                      "params": [],
-                      "hints": {}
-                    }
-                  ],
-                  "events": []
-                }
-              ],
-              "imports": []
-            },
-            "source": {
-              "Program": "tbd"
-            }
-          },
-          {
             "name": "sys-clock",
             "schema": {
               "types": [
@@ -1553,13 +2243,49 @@
       }
     },
     {
-      "name": "mailchimp",
+      "name": "airtable",
       "schema": {
         "types": [
           {
             "name": "Root",
-            "description": "",
+            "description": "Driver to manage Airtable data",
             "actions": [
+              {
+                "name": "configure",
+                "description": "",
+                "type": "Void",
+                "params": [
+                  {
+                    "name": "API_KEY",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  },
+                  {
+                    "name": "BASE_ID",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  }
+                ],
+                "hints": {}
+              },
+              {
+                "name": "refreshWebhook",
+                "description": "",
+                "type": "Void",
+                "params": [
+                  {
+                    "name": "id",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  }
+                ],
+                "hints": {
+                  "hidden": true
+                }
+              },
               {
                 "name": "endpoint",
                 "description": "",
@@ -1596,28 +2322,16 @@
                     "optional": false
                   }
                 ],
-                "hints": {}
-              },
-              {
-                "name": "configure",
-                "description": "",
-                "type": "Void",
-                "params": [
-                  {
-                    "name": "API_KEY",
-                    "description": "",
-                    "type": "String",
-                    "optional": false
-                  }
-                ],
-                "hints": {}
+                "hints": {
+                  "hidden": true
+                }
               }
             ],
             "fields": [
               {
-                "name": "audiences",
+                "name": "tables",
                 "description": "",
-                "type": "AudienceCollection",
+                "type": "TableCollection",
                 "params": [],
                 "hints": {}
               },
@@ -1627,6 +2341,32 @@
                 "type": "String",
                 "params": [],
                 "hints": {}
+              },
+              {
+                "name": "parse",
+                "description": "",
+                "type": "List",
+                "ofType": {
+                  "type": "Ref",
+                  "ofType": "Table"
+                },
+                "params": [
+                  {
+                    "name": "name",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  },
+                  {
+                    "name": "value",
+                    "description": "",
+                    "type": "String",
+                    "optional": false
+                  }
+                ],
+                "hints": {
+                  "hidden": false
+                }
               },
               {
                 "name": "tests",
@@ -1647,14 +2387,14 @@
             "events": []
           },
           {
-            "name": "AudienceCollection",
+            "name": "TableCollection",
             "description": "",
             "actions": [],
             "fields": [
               {
                 "name": "one",
                 "description": "",
-                "type": "Audience",
+                "type": "Table",
                 "params": [
                   {
                     "name": "id",
@@ -1668,40 +2408,15 @@
               {
                 "name": "page",
                 "description": "",
-                "type": "AudiencePage",
-                "params": [
-                  {
-                    "name": "fields",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "count",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "email",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "offset",
-                    "description": "",
-                    "type": "Int",
-                    "optional": true
-                  }
-                ],
+                "type": "TablePage",
+                "params": [],
                 "hints": {}
               },
               {
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "AudienceCollection",
+                "ofType": "TableCollection",
                 "params": [],
                 "hints": {}
               }
@@ -1709,7 +2424,7 @@
             "events": []
           },
           {
-            "name": "AudiencePage",
+            "name": "TablePage",
             "description": "",
             "actions": [],
             "fields": [
@@ -1717,7 +2432,7 @@
                 "name": "items",
                 "description": "",
                 "type": "List",
-                "ofType": "Audience",
+                "ofType": "Table",
                 "params": [],
                 "hints": {}
               },
@@ -1725,7 +2440,7 @@
                 "name": "next",
                 "description": "",
                 "type": "Ref",
-                "ofType": "AudiencePage",
+                "ofType": "TablePage",
                 "params": [],
                 "hints": {}
               },
@@ -1733,7 +2448,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "AudiencePage",
+                "ofType": "TablePage",
                 "params": [],
                 "hints": {}
               }
@@ -1741,9 +2456,31 @@
             "events": []
           },
           {
-            "name": "Audience",
+            "name": "Table",
             "description": "",
-            "actions": [],
+            "actions": [
+              {
+                "name": "createRecord",
+                "description": "",
+                "type": "String",
+                "params": [
+                  {
+                    "name": "fields",
+                    "description": "",
+                    "type": "Json",
+                    "optional": false
+                  }
+                ],
+                "hints": {}
+              },
+              {
+                "name": "createWebhook",
+                "description": "",
+                "type": "Int",
+                "params": [],
+                "hints": {}
+              }
+            ],
             "fields": [
               {
                 "name": "id",
@@ -1757,131 +2494,21 @@
                 "description": "",
                 "type": "String",
                 "params": [],
-                "hints": {}
+                "hints": {
+                  "primary": true
+                }
               },
               {
-                "name": "web_id",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "permission_reminder",
+                "name": "primaryFieldId",
                 "description": "",
                 "type": "String",
                 "params": [],
                 "hints": {}
               },
               {
-                "name": "use_archive_bar",
+                "name": "records",
                 "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "notify_on_subscribe",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "notify_on_unsubscribe",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "date_created",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "list_rating",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "email_type_option",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "subscribe_url_long",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "subscribe_url_short",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "beamer_address",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "visibility",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "double_optin",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "has_welcome",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "marketing_permissions",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "contact",
-                "description": "",
-                "type": "Contact",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "stats",
-                "description": "",
-                "type": "Stats",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "members",
-                "description": "",
-                "type": "MemberCollection",
+                "type": "RecordCollection",
                 "params": [],
                 "hints": {}
               },
@@ -1889,33 +2516,33 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "Audience",
+                "ofType": "Table",
                 "params": [],
                 "hints": {}
               }
             ],
             "events": [
               {
-                "name": "subscriptions",
+                "name": "changed",
                 "description": "",
-                "type": "MemberEvent",
+                "type": "TableEvent",
                 "params": [],
                 "hints": {}
               }
             ]
           },
           {
-            "name": "MemberCollection",
+            "name": "RecordCollection",
             "description": "",
             "actions": [],
             "fields": [
               {
                 "name": "one",
                 "description": "",
-                "type": "Member",
+                "type": "Record",
                 "params": [
                   {
-                    "name": "hash",
+                    "name": "id",
                     "description": "",
                     "type": "String",
                     "optional": false
@@ -1926,30 +2553,60 @@
               {
                 "name": "page",
                 "description": "",
-                "type": "MemberPage",
+                "type": "RecordPage",
                 "params": [
-                  {
-                    "name": "fields",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "count",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
-                  {
-                    "name": "email",
-                    "description": "",
-                    "type": "String",
-                    "optional": true
-                  },
                   {
                     "name": "offset",
                     "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "filterByFormula",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "maxRecords",
+                    "description": "",
                     "type": "Int",
+                    "optional": true
+                  },
+                  {
+                    "name": "pageSize",
+                    "description": "",
+                    "type": "Int",
+                    "optional": true
+                  },
+                  {
+                    "name": "sort",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "view",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "cellFormat",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "timeZone",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                  },
+                  {
+                    "name": "userLocale",
+                    "description": "",
+                    "type": "String",
                     "optional": true
                   }
                 ],
@@ -1959,7 +2616,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "MemberCollection",
+                "ofType": "RecordCollection",
                 "params": [],
                 "hints": {}
               }
@@ -1967,7 +2624,7 @@
             "events": []
           },
           {
-            "name": "MemberPage",
+            "name": "RecordPage",
             "description": "",
             "actions": [],
             "fields": [
@@ -1975,7 +2632,7 @@
                 "name": "items",
                 "description": "",
                 "type": "List",
-                "ofType": "Member",
+                "ofType": "Record",
                 "params": [],
                 "hints": {}
               },
@@ -1983,7 +2640,7 @@
                 "name": "next",
                 "description": "",
                 "type": "Ref",
-                "ofType": "MemberPage",
+                "ofType": "RecordPage",
                 "params": [],
                 "hints": {}
               },
@@ -1991,7 +2648,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "MemberPage",
+                "ofType": "RecordPage",
                 "params": [],
                 "hints": {}
               }
@@ -1999,19 +2656,34 @@
             "events": []
           },
           {
-            "name": "Member",
+            "name": "Record",
             "description": "",
-            "actions": [],
-            "fields": [
+            "actions": [
               {
-                "name": "id",
+                "name": "deleteRecord",
                 "description": "",
-                "type": "String",
+                "type": "Int",
                 "params": [],
                 "hints": {}
               },
               {
-                "name": "email_address",
+                "name": "updateRecord",
+                "description": "",
+                "type": "Int",
+                "params": [
+                  {
+                    "name": "fields",
+                    "description": "",
+                    "type": "Json",
+                    "optional": false
+                  }
+                ],
+                "hints": {}
+              }
+            ],
+            "fields": [
+              {
+                "name": "id",
                 "description": "",
                 "type": "String",
                 "params": [],
@@ -2020,191 +2692,16 @@
                 }
               },
               {
-                "name": "unique_email_id",
+                "name": "createdTime",
                 "description": "",
                 "type": "String",
                 "params": [],
-                "hints": {}
+                "hints": {
+                  "primary": true
+                }
               },
               {
-                "name": "contact_id",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "full_name",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "web_id",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "email_type",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "status",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "unsubscribe_reason",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "consents_to_one_to_one_messaging",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "merge_fields",
-                "description": "",
-                "type": "MergeFields",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "interests",
-                "description": "",
-                "type": "Interests",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "stats",
-                "description": "",
-                "type": "Stats",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "ip_signup",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "timestamp_signup",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "ip_opt",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "timestamp_opt",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "member_rating",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "last_changed",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "language",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "vip",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "email_client",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "location",
-                "description": "",
-                "type": "Location",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "marketing_permissions",
-                "description": "",
-                "type": "List",
-                "ofType": "MarketingPermissions",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "last_note",
-                "description": "",
-                "type": "LastNote",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "source",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "tags_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "tags",
-                "description": "",
-                "type": "List",
-                "ofType": "Tags",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "list_id",
+                "name": "fields",
                 "description": "",
                 "type": "String",
                 "params": [],
@@ -2214,7 +2711,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "Member",
+                "ofType": "Record",
                 "params": [],
                 "hints": {}
               }
@@ -2222,458 +2719,15 @@
             "events": []
           },
           {
-            "name": "MergeFields",
+            "name": "TableEvent",
             "description": "",
             "actions": [],
             "fields": [
               {
-                "name": "property1",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "property2",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "MergeFields",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "Interests",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "property1",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "property2",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "Interests",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "Location",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "latitude",
-                "description": "",
-                "type": "Float",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "longitude",
-                "description": "",
-                "type": "Float",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gmtoff",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "dstoff",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "country_code",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "timezone",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "region",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "Location",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "MarketingPermissions",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "marketing_permission_id",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "text",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "enabled",
-                "description": "",
-                "type": "Boolean",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "MarketingPermissions",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "LastNote",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "note_id",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "created_at",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "created_by",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "note",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "LastNote",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "Tags",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "id",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "name",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "Tags",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "Contact",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "company",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "address1",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "address2",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "city",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "state",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "zip",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "country",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "phone",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "Contact",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "Stats",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "member_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "total_contacts",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "unsubscribe_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "cleaned_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "member_count_since_send",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "unsubscribe_count_since_send",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "cleaned_count_since_send",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "campaign_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "campaign_last_sent",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "merge_field_count",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "avg_sub_rate",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "avg_unsub_rate",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "target_sub_rate",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "open_rate",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "click_rate",
-                "description": "",
-                "type": "Int",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "last_sub_date",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "last_unsub_date",
-                "description": "",
-                "type": "String",
-                "params": [],
-                "hints": {}
-              },
-              {
-                "name": "gref",
-                "description": "A reference to this node",
-                "type": "Ref",
-                "ofType": "Stats",
-                "params": [],
-                "hints": {}
-              }
-            ],
-            "events": []
-          },
-          {
-            "name": "MemberEvent",
-            "description": "",
-            "actions": [],
-            "fields": [
-              {
-                "name": "member",
+                "name": "record",
                 "description": "",
                 "type": "Ref",
-                "ofType": "Member",
+                "ofType": "Record",
                 "params": [],
                 "hints": {}
               },
@@ -2688,7 +2742,7 @@
                 "name": "gref",
                 "description": "A reference to this node",
                 "type": "Ref",
-                "ofType": "MemberEvent",
+                "ofType": "TableEvent",
                 "params": [],
                 "hints": {}
               }
@@ -2700,7 +2754,7 @@
             "description": "",
             "actions": [
               {
-                "name": "testGetAudiences",
+                "name": "testGetTables",
                 "description": "",
                 "type": "Boolean",
                 "params": [],
@@ -2721,6 +2775,32 @@
           }
         ],
         "imports": [
+          {
+            "name": "sys-process",
+            "schema": {
+              "types": [
+                {
+                  "name": "Root",
+                  "description": "",
+                  "actions": [],
+                  "fields": [
+                    {
+                      "name": "endpointUrl",
+                      "description": "Gets the program's own endpoint URL",
+                      "type": "String",
+                      "params": [],
+                      "hints": {}
+                    }
+                  ],
+                  "events": []
+                }
+              ],
+              "imports": []
+            },
+            "source": {
+              "Program": "tbd"
+            }
+          },
           {
             "name": "http",
             "schema": {
